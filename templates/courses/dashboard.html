@@ -1,0 +1,99 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<section class="instructor_info">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-4">
+				<div class="card p-4">
+					<div class="about-instructor">
+						<div
+							class="user-info d-flex align-items-center flex-column justify-content-center"
+						>
+							<img
+								src="{{user_profile.avatar.url}}"
+								alt=""
+								class="rounded-circle"
+								width="150"
+								height="150"
+								style="object-fit: cover"
+							/>
+							<span class="mx-2 text-capitalize my-2">
+								<a class="h6 text-decoration-none" href="#"
+									>{{user_profile.full_name}}</a
+								>
+								<span>- {{user_profile.headline}}</span>
+							</span>
+						</div>
+						<div class="user-social my-3 text-center">
+							<span class="youtube">
+								<a class="btn btn-dark text-decoration-none">
+									<i class="bi bi-youtube"></i>
+								</a>
+							</span>
+							<span class="twitter">
+								<a class="btn btn-dark text-decoration-none">
+									<i class="bi bi-twitter"></i>
+								</a>
+							</span>
+							<span class="instagram">
+								<a class="btn btn-dark text-decoration-none">
+									<i class="bi bi-instagram"></i>
+								</a>
+							</span>
+						</div>
+					</div>
+					<div class="d-grid gap-2">
+						<button class="btn btn-dark" type="button">
+							YouTube Channel
+						</button>
+					</div>
+				</div>
+				<div class="d-grid gap-2 mt-3">
+					<a
+						href="{% url 'update_profile' %}"
+						class="btn btn-dark"
+						type="button"
+					>
+						Update Profile
+					</a>
+				</div>
+			</div>
+			<div class="col-md-8">
+				<!-- Courses By user -->
+				<div class="card p-4">
+					<div class="card-title">
+						<h5 class="fw-bold">Your Courses</h5>
+					</div>
+					<div class="coures">
+						<div class="row featured-course-card mx-auto">
+							{% for course in course_by_instructor %}
+							<div class="col-6 col-md-3">
+								<a href="" class="text-decoration-none text-white">
+									<div class="card">
+										<img
+											src="{{course.course_thumbnail.url}}"
+											class="card-img-top"
+											alt="..."
+										/>
+										<div class="card-body">
+											<blockquote class="blockquote bold">
+												<h6 class="h6">{{course.course_title}}</h6>
+											</blockquote>
+											<div class="d-grid gap-2 col mx-auto">
+												<a href="" class="btn btn-dark" type="button">
+													Edit Course
+												</a>
+											</div>
+										</div>
+									</div>
+								</a>
+							</div>
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+{% endblock content %}

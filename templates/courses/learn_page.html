@@ -1,0 +1,131 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<div class="row gx-0">
+	<div class="col-md-9 video-side" style="overflow-y: scroll">
+		<div class="ratio ratio-16x9">
+			<iframe
+				src="https://www.youtube.com/embed/{{course.course_introduction_video_id}}"
+				title="YouTube video"
+				allowfullscreen
+				id="iframe-src"
+			></iframe>
+		</div>
+		<div class="about-course p-4 text-white">
+			<div class="course-info">
+				<h4>About This Course</h4>
+				<h6>{{course.course_subtitle}}</h6>
+			</div>
+			<hr />
+			<div class="more-course-info text-capitalize">
+				<h6>Course Level: {{course.course_level}}</h6>
+				<h6>Students Enrolled: {{course.no_of_enrolled}}</h6>
+				<h6>course Language: {{course.course_language}}</h6>
+				<h6>No of Lectures: {{course.no_of_lecture}}</h6>
+			</div>
+			<hr />
+			<div class="course-description">
+				<h4>Description:</h4>
+				<p>{{course.course_description}}</p>
+			</div>
+			<hr />
+			<div class="about-instructor">
+				<div class="user-info d-flex align-items-center">
+					<img
+						src="{{course.course_instructor.profile.avatar.url}}"
+						alt=""
+						class="rounded-circle"
+						width="150"
+						height="150"
+					/>
+					<span class="mx-2 text-capitalize">
+						<a class="h6 text-decoration-none" href="#"
+							>{{instructor.full_name}}
+						</a>
+						<span>- {{instructor.headline}} </span>
+					</span>
+				</div>
+				<div class="instructor-social my-3">
+					<span class="youtube">
+						<a class="btn btn-dark text-decoration-none">
+							<i class="bi bi-youtube"></i>
+						</a>
+					</span>
+					<span class="twitter">
+						<a class="btn btn-dark text-decoration-none">
+							<i class="bi bi-twitter"></i>
+						</a>
+					</span>
+					<span class="instagram">
+						<a class="btn btn-dark text-decoration-none">
+							<i class="bi bi-instagram"></i>
+						</a>
+					</span>
+				</div>
+				<p class="mt-1 about-instructor">{{instructor.biography}}</p>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-3 side-lesson d-none d-md-block px-3">
+		<ul class="list-group list-group-flush text-white" id="lectures">
+			{% for lecture in lectures%}
+			<li
+				class="d-flex justify-content-between mt-2 p-2 list-group-item list-group-item-action"
+			>
+				<div class="d-flex flex-row align-items-center">
+					<div class="ml-2" onclick="changeVideo('{{ lecture.id | safe }}')">
+						<h6
+							class="mb-0 text-decoration-none text-white under"
+							style="cursor: pointer"
+						>
+							{{lecture.lecture_title}}
+						</h6>
+
+						<div class="d-flex flex-row mt-1 text-black-50 date-time">
+							<div>
+								<span class="ml-2 text-white opacity-50">24th march</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="check-box">
+					<input
+						type="checkbox"
+						class="label__input label__input"
+						name="status"
+						style="cursor: pointer"
+						{% if request.user in lecture.completed.all%}
+						checked
+						{% endif %}
+						id="checkbox"
+						onclick="markComplete('{{ lecture.id | safe }}')"
+					/>
+				</div>
+			</li>
+			{% endfor %}
+		</ul>
+	</div>
+</div>
+<script>
+	const changeVideo = (id) => {
+		{% for lecture in lectures %}
+	           if('{{lecture.id | safe}}' == id){
+	              document.getElementById("iframe-src").src = "https://www.youtube.com/embed/{{lecture.youtube_video_id}}"
+	               }
+	    {% endfor %}
+	};
+
+	const markComplete = (id) =>{
+	       $.ajax({
+	           url:`{% url 'mark-complete' %}`,
+	           type: 'POST',
+	           data: {
+	               csrfmiddlewaretoken: '{{csrf_token}}',
+				   id:id
+	            },
+	           success: function (response) {
+	           }
+	       });
+
+	   }
+</script>
+
+{% endblock content %}

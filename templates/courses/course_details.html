@@ -1,0 +1,158 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<section class="course-info mt-5">
+	<div class="container">
+		<div class="row">
+			<!-- Blog entries-->
+			<div class="col-lg-8">
+				<!-- course info -->
+				<div class="card p-4 text-white">
+					<div class="course-title text-capitalize">
+						<div class="course-info">
+							<h1>{{course.title}}</h1>
+						</div>
+						<hr />
+						<div class="more-course-info text-capitalize">
+							<h5 class="badge bg-warning text-dark">
+								Course Level: {{course.level}}
+							</h5>
+							<h5 class="badge bg-warning text-dark">
+								Students Enrolled: {{course.no_of_enrolled}}
+							</h5>
+							<h5 class="badge bg-warning text-dark">
+								course Language: {{course.language }}
+							</h5>
+							<h5 class="badge bg-warning text-dark">
+								No of Lectures: {{course.no_of_lecture}}
+							</h5>
+						</div>
+					</div>
+				</div>
+				<!-- syllabus card -->
+				<div class="card p-4 text-white">
+					<div class="syllabus px-2">
+						<h2 class="h2 text-capitalize">syllabus</h2>
+						<div class="mt-2">
+							<!-- section 1 -->
+							<div class="section">
+								<!-- lesson-1 -->
+
+								<div class="">
+									<ul class="list-group list-group-flush">
+										{% for lecture in lectures %}
+										<li class="list-group-item list-group-item-action">
+											{{lecture.lecture_title}}
+										</li>
+										{% endfor %}
+									</ul>
+								</div>
+							</div>
+							<!-- section -2 -->
+						</div>
+					</div>
+				</div>
+				<!-- course Description -->
+				<div class="card p-4 text-white">
+					<div class="course-description">
+						<h4>Description:</h4>
+						<p>{{course.description}}</p>
+					</div>
+				</div>
+				<!-- About Instructor card -->
+				{% comment %}
+				<div class="card p-4 text-white">
+					<div class="about-instructor">
+						<div class="user-info d-flex align-items-center">
+							<a
+								href="{% url 'instructor_profile' course.course_instructor %}"
+								class="text-decoration-none"
+							>
+								<img
+									src="{{course.course_instructor.profile.avatar.url}}"
+									alt=""
+									class="rounded-circle"
+									width="150"
+									height="150"
+								/>
+							</a>
+							<span class="mx-2 text-capitalize">
+								<a class="h6 text-decoration-none text-white" href="#"
+									>{{course.course_instructor}}</a
+								>
+								<span>- {{course.course_instructor.profile.headline}}</span>
+							</span>
+						</div>
+						<div class="instructor-social my-3">
+							<span class="youtube">
+								<a class="btn btn-dark">
+									<i class="bi bi-youtube"></i>
+								</a>
+							</span>
+							<span class="twitter">
+								<a class="btn btn-dark text-decoration-none">
+									<i class="bi bi-twitter"></i>
+								</a>
+							</span>
+							<span class="instagram">
+								<a class="btn btn-dark text-decoration-none">
+									<i class="bi bi-instagram"></i>
+								</a>
+							</span>
+						</div>
+						<p class="mt-1 about-instructor">
+							{{course.course_instructor.profile.biography}}
+						</p>
+					</div>
+				</div>
+				{% endcomment %}
+			</div>
+			<!-- Side widgets-->
+			<div class="col-lg-4 order-sm-last order-first">
+				<div class="card text-white">
+					<img src="{{course.thumbnail.url}}" class="card-img-top" alt="..." />
+					<div class="card-body">
+						<blockquote class="blockquote bold">
+							<h5 class="h5">{{course.title}}</h5>
+						</blockquote>
+
+						<figcaption class="blockquote-footer mt-1 text-white-50">
+							<cite title="Source Title text-white"
+								>{{course.instructor | capfirst}}</cite
+							>
+						</figcaption>
+
+						<figcaption class="blockquote-footer mt-1">
+							<cite title="Source Title"> {{course.no_of_lecture}}</cite>
+						</figcaption>
+						{% if request.user in course.enrolled_student.all%}
+						<div class="d-grid gap-2">
+							<a
+								href="{% url 'enroll' course.id %}"
+								class="btn btn-dark"
+								type="button"
+								>Go To Lectures</a
+							>
+						</div>
+						{%else%}
+						<form action="{% url 'enroll' course.id %}" method="POST">
+							{% csrf_token %}
+							<div class="d-grid gap-2">
+								<button
+									type="submit"
+									value="{{course.id}}"
+									name="enroll"
+									class="btn btn-dark"
+									type="button"
+								>
+									Enroll Now
+								</button>
+							</div>
+						</form>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+{% endblock content %}

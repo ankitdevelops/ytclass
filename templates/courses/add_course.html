@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<section id="course-details" >
+   
+    <div class="container" >
+      <a href = "{% url 'profile' %}" type="button" class="btn btn-dark mt-3"><i class="bi bi-arrow-left-circle-fill" ></i> <span class="mx-2">Back</span></a>
+      <div class="card p-3 text-white" >
+        <div class="row">
+            <form  method="POST" enctype="multipart/form-data">
+                {% csrf_token %} {{course_form | crispy }}
+                <button class="btn btn-dark mt-3" type="submit" >Add Now</button>
+            </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+{% endblock content %}

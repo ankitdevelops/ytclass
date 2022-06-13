@@ -1,0 +1,16 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "==3.2"
+pillow = "*"
+django-crispy-forms = "*"
+pytube = "*"
+django-allauth = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.10"

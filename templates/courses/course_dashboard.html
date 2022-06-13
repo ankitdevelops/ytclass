@@ -1,0 +1,165 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<section id="course-details">
+	<div class="container">
+		<a href="{% url 'profile' %}" type="button" class="btn btn-dark mt-3"
+			><i class="bi bi-arrow-left-circle-fill"></i>
+			<span class="mx-2">Back</span></a
+		>
+		<div class="card p-3 text-white">
+			<div class="row">
+				<div class="course-title text-capitalize">
+					<div class="course-info">
+						<h1>{{course.title}}</h1>
+					</div>
+					<hr />
+					<div class="more-course-info text-capitalize">
+						<h5>Course Level: {{course.level}}</h5>
+						<h5>Students Enrolled: {{course.no_of_enrolled}}</h5>
+						<h5>course Language: {{course.language}}</h5>
+						<h5>No of Lectures: {{course.no_of_lecture}}</h5>
+					</div>
+
+					<a
+						class="float-end text-white text-decoration-none mx-2"
+						style="cursor: pointer; font-size: 24px"
+						><i
+							class="bi bi-trash"
+							data-bs-toggle="tooltip"
+							data-bs-placement="top"
+							data-bs-custom-class="custom-tooltip"
+							title="Delete This Course"
+							onclick="deleteCourse('{{course.title}}','	{{course.id}}')"
+						></i
+					></a>
+					<a
+						href="{% url 'edit-course' course.id %}"
+						class="float-end text-white text-decoration-none"
+						style="cursor: pointer; font-size: 24px"
+					>
+						<i
+							class="bi bi-pencil-square"
+							data-bs-toggle="tooltip"
+							data-bs-placement="top"
+							data-bs-custom-class="custom-tooltip"
+							title="Update Course Details"
+						></i
+					></a>
+				</div>
+				<hr />
+				<div class="lectures">
+					<a
+						href="{% url 'add-lecture' course.id %}"
+						class="float-end text-white btn btn-dark"
+						><span class="mx-2">Add Lectures</span>
+						<i class="bi bi-plus-circle"></i
+					></a>
+					<div>
+						<h3>Lectures</h3>
+						{% if lectures %}
+						<ul class="list-group list-group-flush">
+							{% for lecture in lectures %}
+							<li class="list-group-item" id="dash-lecture">
+								{{lecture.lecture_title}}
+
+								<a
+									class="float-end text-white text-decoration-none"
+									style="cursor: pointer; font-size: 24px"
+									><i
+										class="bi bi-trash"
+										onclick="deleteLecture('{{lecture.lecture_title}}','	{{lecture.id}}')"
+									></i>
+								</a>
+								<a
+									href="{% url 'edit-lecture' lecture.id %}"
+									class="float-end mx-2 text-white text-decoration-none"
+									style="cursor: pointer; font-size: 24px"
+								>
+									<i class="bi bi-pencil-square"></i>
+								</a>
+							</li>
+							{% endfor %}
+						</ul>
+						{% else %}
+						<div class="col-sm-12 col-md-5 mx-auto">
+							<div class="d-grid gap-0">
+								<a
+									href="{% url 'add-lecture' course.id %}"
+									class="btn btn-dark text-white"
+									>Add Lectures</a
+								>
+								<p class="fst-italic fw-light">
+									You will have to add one by one.
+								</p>
+								<a
+									href="{% url 'auto-import' course.id %}"
+									class="btn btn-dark text-white"
+									>Auto Import from playlist</a
+								>
+								<p class="fst-italic fw-light">
+									Only works, if you have added YouTube playlist link.
+								</p>
+							</div>
+						</div>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+	const deleteLecture = (title, id) => {
+		swal({
+			title: "Are you sure you want to delete this lecture?",
+			text: title,
+			icon: "warning",
+			buttons: {
+				cancel: {
+					text: "Cancel",
+					value: null,
+					visible: true,
+					closeModal: true,
+				},
+				confirm: {
+					text: "Sure, I am",
+					value: true,
+					visible: true,
+					closeModal: true,
+				},
+			},
+		}).then((value) => {
+			if (value) {
+				location.href = "/delete_lecture/" + id + "/";
+			}
+		});
+	};
+
+	const deleteCourse = (title, id) => {
+		swal({
+			title: "Are you sure you want to delete this Course?",
+			text: title,
+			icon: "warning",
+			buttons: {
+				cancel: {
+					text: "Cancel",
+					value: null,
+					visible: true,
+					closeModal: true,
+				},
+				confirm: {
+					text: "Sure, I am",
+					value: true,
+					visible: true,
+					closeModal: true,
+				},
+			},
+		}).then((value) => {
+			if (value) {
+				location.href = "/delete_course/" + id + "/";
+			}
+		});
+	};
+</script>
+{% endblock content %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %} {% load static %} {% block content %} 
+{% load crispy_forms_tags %}
+<section class="user_info">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4"></div>
+      <div class="col-md-8">
+        <div class="card p-4">
+          <div class="user-description">
+            <h5 class="fw-bold h5">Update Profile</h5>
+          </div>
+          {% if profile_form.errors %} {% for field in form %} {% for error in
+          field.errors %}
+          <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+          </div>
+          {% endfor %} {% endif %}
+          <form
+            action="{% url 'update_profile' %}"
+            method="POST"
+            enctype="multipart/form-data"
+          >
+            {% csrf_token %} {{profile_form | crispy }}
+            <button class="btn btn-dark mt-3" type="submit">Update</button>
+          </form>
+        </div>
+        <!-- Courses By user -->
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock content %}
