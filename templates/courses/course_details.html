@@ -22,7 +22,7 @@
 								course Language: {{course.language }}
 							</h5>
 							<h5 class="badge bg-warning text-dark">
-								No of Lectures: {{course.no_of_lecture}}
+								No of Lectures: {{course.lecture_count}}
 							</h5>
 						</div>
 					</div>
@@ -58,16 +58,16 @@
 					</div>
 				</div>
 				<!-- About Instructor card -->
-				{% comment %}
+			
 				<div class="card p-4 text-white">
 					<div class="about-instructor">
 						<div class="user-info d-flex align-items-center">
 							<a
-								href="{% url 'instructor_profile' course.course_instructor %}"
+								href="{% url 'instructor_profile' course.instructor.profile.user.username %}"
 								class="text-decoration-none"
 							>
 								<img
-									src="{{course.course_instructor.profile.avatar.url}}"
+									src="{{course.instructor.profile.avatar}}"
 									alt=""
 									class="rounded-circle"
 									width="150"
@@ -76,34 +76,35 @@
 							</a>
 							<span class="mx-2 text-capitalize">
 								<a class="h6 text-decoration-none text-white" href="#"
-									>{{course.course_instructor}}</a
+									>{{course.instructor.profile.full_name}}</a
 								>
-								<span>- {{course.course_instructor.profile.headline}}</span>
+								<span>- {{course.instructor.profile.bio}}</span>
 							</span>
 						</div>
 						<div class="instructor-social my-3">
 							<span class="youtube">
-								<a class="btn btn-dark">
+								<a class="btn btn-dark" href="{{course.instructor.profile.youtube}}"  target="_blank">
 									<i class="bi bi-youtube"></i>
 								</a>
+								
 							</span>
 							<span class="twitter">
-								<a class="btn btn-dark text-decoration-none">
+								<a class="btn btn-dark text-decoration-none" href="{{course.instructor.profile.twitter}}"  target="_blank">
 									<i class="bi bi-twitter"></i>
 								</a>
 							</span>
 							<span class="instagram">
-								<a class="btn btn-dark text-decoration-none">
+								<a class="btn btn-dark text-decoration-none" href="{{course.instructor.profile.instagram}}"  target="_blank"> 
 									<i class="bi bi-instagram"></i>
 								</a>
 							</span>
 						</div>
 						<p class="mt-1 about-instructor">
-							{{course.course_instructor.profile.biography}}
+							{{course.instructor.profile.biography}} 
 						</p>
 					</div>
 				</div>
-				{% endcomment %}
+				
 			</div>
 			<!-- Side widgets-->
 			<div class="col-lg-4 order-sm-last order-first">
@@ -121,7 +122,7 @@
 						</figcaption>
 
 						<figcaption class="blockquote-footer mt-1">
-							<cite title="Source Title"> {{course.no_of_lecture}}</cite>
+							<cite title="Source Title"> {{course.lecture_count}} lessons</cite>
 						</figcaption>
 						{% if request.user in course.enrolled_student.all%}
 						<div class="d-grid gap-2">

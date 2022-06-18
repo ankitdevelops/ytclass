@@ -1,9 +1,10 @@
 {% extends 'base.html' %} {% load static %} {% block content %}
 <div class="row gx-0">
+	
 	<div class="col-md-9 video-side" style="overflow-y: scroll">
 		<div class="ratio ratio-16x9">
 			<iframe
-				src="https://www.youtube.com/embed/{{course.course_introduction_video_id}}"
+				src="https://www.youtube.com/embed/{{lectures.0.youtube_video_id}}"
 				title="YouTube video"
 				allowfullscreen
 				id="iframe-src"
@@ -11,36 +12,36 @@
 		</div>
 		<div class="about-course p-4 text-white">
 			<div class="course-info">
-				<h4>About This Course</h4>
+				<h4>About This Course 	</h4>
 				<h6>{{course.course_subtitle}}</h6>
 			</div>
 			<hr />
 			<div class="more-course-info text-capitalize">
-				<h6>Course Level: {{course.course_level}}</h6>
+				<h6>Course Level: {{course.level}}</h6>
 				<h6>Students Enrolled: {{course.no_of_enrolled}}</h6>
-				<h6>course Language: {{course.course_language}}</h6>
-				<h6>No of Lectures: {{course.no_of_lecture}}</h6>
+				<h6>course Language: {{course.language}}</h6>
+				<h6>No of Lectures: {{course.lecture_count}}</h6>
 			</div>
 			<hr />
 			<div class="course-description">
 				<h4>Description:</h4>
-				<p>{{course.course_description}}</p>
+				<p>{{course.description}}</p>
 			</div>
 			<hr />
 			<div class="about-instructor">
 				<div class="user-info d-flex align-items-center">
 					<img
-						src="{{course.course_instructor.profile.avatar.url}}"
+						src="{{course.instructor.profile.avatar}}"
 						alt=""
 						class="rounded-circle"
 						width="150"
 						height="150"
 					/>
 					<span class="mx-2 text-capitalize">
-						<a class="h6 text-decoration-none" href="#"
+						<a class="h6 text-decoration-none" href="{% url 'instructor_profile' course.instructor.profile.user.username %}"
 							>{{instructor.full_name}}
 						</a>
-						<span>- {{instructor.headline}} </span>
+						<span>- {{instructor.bio}} </span>
 					</span>
 				</div>
 				<div class="instructor-social my-3">
@@ -60,7 +61,7 @@
 						</a>
 					</span>
 				</div>
-				<p class="mt-1 about-instructor">{{instructor.biography}}</p>
+				<p class="mt-1 about-instructor">{{instructor.about_me}}</p>
 			</div>
 		</div>
 	</div>
@@ -76,7 +77,8 @@
 							class="mb-0 text-decoration-none text-white under"
 							style="cursor: pointer"
 						>
-							{{lecture.lecture_title}}
+							{{lecture.lecture_title}} 
+
 						</h6>
 
 						<div class="d-flex flex-row mt-1 text-black-50 date-time">

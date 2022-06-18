@@ -1,8 +1,10 @@
+from itertools import count
 from django.db import models
 from django.contrib.auth.models import User
 import uuid
 from django.utils.text import slugify
 from django.core.validators import FileExtensionValidator
+from django.urls import reverse
 
 
 class Category(models.Model):
@@ -11,8 +13,15 @@ class Category(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        verbose_name = "category"
+        verbose_name_plural = "categories"
+
     def __str__(self):
         return self.category
+
+    def get_url(self):
+        return reverse("course_by_category", args=[self.category_slug])
 
 
 class Course(models.Model):
@@ -35,13 +44,8 @@ class Course(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     description = models.TextField()
     level = models.CharField(max_length=50, choices=level_choice)
-    course_introduction_video_id = models.CharField(
-        max_length=50,
-        unique=True,
-    )
     playlist_link = models.URLField(blank=True, null=True)
     is_featured = models.BooleanField(default=False)
-    no_of_lecture = models.IntegerField()
     enrolled_student = models.ManyToManyField(
         User, blank=True, related_name="enrolled_students"
     )
@@ -55,6 +59,10 @@ class Course(models.Model):
     def no_of_enrolled(self):
         return self.enrolled_student.count()
 
+    def lecture_count(self):
+        lectures = Lecture.objects.filter(lecture_of_course=self).values_list().count()
+        return lectures
+
     def save(self, *args, **kwargs):
 
         self.title_slug = slugify(self.title)
@@ -66,7 +74,6 @@ class Lecture(models.Model):
     lecture_title = models.CharField(max_length=200)
     lecture_title_slug = models.SlugField(max_length=200, unique=False)
     youtube_video_id = models.CharField(max_length=100, unique=True)
-    # lecture_number = models.IntegerField()
     completed = models.ManyToManyField(User, blank=True)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     created = models.DateTimeField(auto_now_add=True)

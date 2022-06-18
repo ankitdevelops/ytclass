@@ -1,5 +1,4 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.db.models import Count
 from django.contrib import messages
 from .models import *
 from profiles.models import Profile
@@ -8,24 +7,15 @@ from django.http import HttpResponse
 from .forms import *
 from pytube import Playlist, YouTube
 from django.forms import inlineformset_factory
+from django.contrib.auth.decorators import login_required
 
 
-def home(request):
-    featured_courses = Course.objects.all().filter(is_featured=True)
-    most_enrolled = Course.objects.annotate(
-        enroll_count=Count("enrolled_student")
-    ).order_by("-enroll_count")[:6]
-    recently_added = Course.objects.all().order_by("-created")[:6]
-    context = {
-        "featured_courses": featured_courses,
-        "most_enrolled": most_enrolled,
-        "recently_added": recently_added,
-    }
-    return render(request, "webpages/home.html", context)
-
-
-def explore_courses(request):
-    all_courses = Course.objects.all()
+def explore_courses(request, category_slug=None):
+    if category_slug != None:
+        category = Category.objects.get(category_slug=category_slug)
+        all_courses = Course.objects.filter(category=category)
+    else:
+        all_courses = Course.objects.all()
     context = {
         "all_courses": all_courses,
     }
@@ -57,6 +47,7 @@ def course_dashboard(request, id):
     return render(request, "courses/course_dashboard.html", context)
 
 
+@login_required(login_url="account_login")
 def add_course(request):
     user = request.user
     profile = request.user.profile
@@ -77,12 +68,14 @@ def add_course(request):
     return render(request, "courses/add_course.html", context)
 
 
-def delete_course(request,id):
+@login_required(login_url="account_login")
+def delete_course(request, id):
     course = get_object_or_404(Course, pk=id)
     course.delete()
     return redirect(reverse("profile"))
 
 
+@login_required(login_url="account_login")
 def edit_course(request, id):
     course = get_object_or_404(Course, pk=id)
     user = Profile.objects.get(user=request.user)
@@ -108,6 +101,7 @@ def edit_course(request, id):
     return render(request, "courses/edit_course.html", context)
 
 
+@login_required(login_url="account_login")
 def add_lecture(request, id):
     course = Course.objects.get(id=id)
     # add_lecture = AddLectureForm()
@@ -139,6 +133,7 @@ def add_lecture(request, id):
     return render(request, "courses/add_lecture.html", context)
 
 
+@login_required(login_url="account_login")
 def edit_lecture(request, id):
     lecture = get_object_or_404(Lecture, pk=id)
     course = lecture.lecture_of_course
@@ -166,6 +161,7 @@ def edit_lecture(request, id):
     return render(request, "courses/edit_lecture.html", context)
 
 
+@login_required(login_url="account_login")
 def delete_lecture(request, id):
     lecture = get_object_or_404(Lecture, pk=id)
     course = lecture.lecture_of_course
@@ -177,6 +173,7 @@ def delete_lecture(request, id):
     return redirect(reverse("course_dashboard", kwargs={"id": course.id}))
 
 
+@login_required(login_url="account_login")
 def dashboard(request):
     instructor = Profile.objects.get(user=request.user)
     if instructor.is_instructor:
@@ -189,6 +186,7 @@ def dashboard(request):
     return render(request, "courses/dashboard.html", context)
 
 
+@login_required(login_url="account_login")
 def enroll_course(request, id):
     course = get_object_or_404(Course, pk=id)
     lectures = (
@@ -220,6 +218,7 @@ def enroll_course(request, id):
     return render(request, "courses/learn_page.html", context)
 
 
+@login_required(login_url="account_login")
 def mark_complete(request):
     print(request)
     id = request.POST.get("id")
@@ -235,10 +234,10 @@ def mark_complete(request):
     return HttpResponse("Marked Completed")
 
 
+@login_required(login_url="account_login")
 def auto_import(request, id):
     course = Course.objects.get(id=id)
     video_links = Playlist(course.playlist_link).video_urls
-
     for link in video_links:
         lecture = Lecture.objects.bulk_create(
             [
@@ -250,3 +249,19 @@ def auto_import(request, id):
             ]
         )
     return redirect(reverse("course_dashboard", kwargs={"id": course.id}))
+
+
+def search(request):
+    if "keyword" in request.GET:
+        keyword = request.GET["keyword"]
+        if keyword:
+            courses = Course.objects.order_by("-updated").filter(
+                title__icontains=keyword
+            )
+            no_of_result = courses.count()
+    context = {
+        "courses": courses,
+        "no_of_result": no_of_result,
+    }
+
+    return render(request, "courses/search.html", context)

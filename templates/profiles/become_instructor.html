@@ -1,28 +1,26 @@
 {% extends 'base.html' %} {% load static %} {% block content %} 
 {% load crispy_forms_tags %}
 <section class="user_info">
-  <div class="container">
-    <div class="row justify-content-center">
-   
-      <div class="col-md-8">
-        <a href = "{% url 'profile' %}" type="button" class="btn btn-dark mt-3"><i class="bi bi-arrow-left-circle-fill" ></i> <span class="mx-2">Back</span></a>
+  <div class="container ">
+    <div class="row mx-auto justify-content-center">
+      <div class="col-md-6 ">
         <div class="card p-4">
           <div class="user-description">
-            <h5 class="fw-bold h5">Update Profile</h5>
+            <h5 class="fw-bold h5">Become Instructor</h5>
           </div>
-          {% if profile_form.errors %} {% for field in form %} {% for error in
+          {% if form.errors %} {% for field in form %} {% for error in
           field.errors %}
           <div class="alert alert-danger">
             <strong>{{ error|escape }}</strong>
           </div>
           {% endfor %} {% endif %}
           <form
-            action="{% url 'update_profile' %}"
+            action=""
             method="POST"
             enctype="multipart/form-data"
           >
-            {% csrf_token %} {{profile_form | crispy }}
-            <button class="btn btn-dark mt-3" type="submit">Update</button>
+            {% csrf_token %} {{form | crispy }}
+            <button class="btn btn-dark mt-3" type="submit">Submit</button>
           </form>
         </div>
         <!-- Courses By user -->

@@ -1,0 +1,57 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<section id="featured-courses" class="my-5 text-white">
+  <div class="row container mb-4 mx-auto">
+    <div
+      class="featured-courses-heading d-flex justify-content-between mx-auto"
+    >
+     
+        <h4>Course Found <span class="badge bg-primary ">{{no_of_result}}</span></h4>
+      
+    </div>
+  </div>
+  <div class="container">
+    <div class="row featured-course-card mx-auto">
+      {%for course in courses%}
+      <div class="col-6 col-md-3">
+        <a
+          href="{% url 'course_details' course.id %}"
+          class="text-decoration-none text-white"
+        >
+          <div class="card">
+            <img
+              src="{{course.thumbnail.url}}"
+              class="card-img-top"
+              alt="..."
+            />
+            <div class="card-body">
+              <blockquote class="blockquote bold">
+                <h6 class="h5 text-capitalize">{{course.title}}</h6>
+              </blockquote>
+
+              <figcaption class="blockquote-footer mt-1 text-white-50">
+                <cite title="Source Title">
+                  by &#160;
+                  <span class=""
+                    ><a
+                      href="{% url 'instructor_profile' course.instructor.profile.user.username%}"
+                      >{{course.instructor.profile.full_name |capfirst}}</a
+                    ></span
+                  ></cite
+                >
+              </figcaption>
+
+              {% comment %}
+              <figcaption class="blockquote-footer mt-1">
+                <cite title="Source Title"> 58 Lectures</cite>
+              </figcaption>
+              {% endcomment %}
+            </div>
+          </div>
+        </a>
+      </div>
+      {%endfor%}
+    </div>
+  </div>
+</section>
+
+{% endblock content %}

@@ -9,7 +9,7 @@
 			<div class="masthead-heading text-uppercase">
 				Find Best YouTube Courses
 			</div>
-			<a class="btn btn-primary btn-xl text-uppercase" href="#services"
+			<a class="btn btn-primary btn-xl text-uppercase" href="{% url 'explore' %}"
 				>Explore Courses</a
 			>
 		</div>
@@ -39,7 +39,7 @@
 				</figcaption>
 
 				<figcaption class="blockquote-footer mt-1">
-				  <cite title="Source Title"> {{course.no_of_lecture}}</cite>
+				  <cite title="Source Title"> {{course.lecture_count}} lessons</cite>
 				</figcaption>
 			  </div>
 			</div>
@@ -54,200 +54,68 @@
 <!-- Most Enrolled Courses -->
 <section id="featured-courses" class="my-5 text-white">
 	<div class="row container mb-4 mx-auto">
-		<div
-			class="featured-courses-heading d-flex justify-content-between mx-auto text-capitalize"
-		>
-			<h3>Most Enrolled courses</h3>
-			<a href=""><h6>View All</h6></a>
-		</div>
+		<h3>Most Enrolled  courses</h3>
 	</div>
-	<div class="container">
-		<div class="row featured-course-card mx-auto">
-			<div class="col-6 col-md-3">
-				<a href="" class="text-decoration-none text-white">
-					<div class="card">
-						<img src="./img/bg.jpg" class="card-img-top" alt="..." />
-						<div class="card-body">
-							<blockquote class="blockquote bold">
-								<h6 class="h6">Python for absoulte begginers</h6>
-							</blockquote>
+  <div class="container">
+	<div class="row featured-course-card mx-auto">
+	  {% for course in most_enrolled %}
+	  <div class="col-6 col-md-3 d-flex align-items-stretch">
+		<a href="{% url 'course_details' course.id %}" class="text-decoration-none text-white">
+		  <div class="card">
+			<img src="{{course.thumbnail.url}}" class="card-img-top" alt="..." />
+			<div class="card-body">
+			  <blockquote class="blockquote bold">
+				<h6 class="h6">{{course.title}}</h6>
+			  </blockquote>
 
-							<figcaption class="blockquote-footer mt-1 text-white-50">
-								<cite title="Source Title">Ankit Andrel</cite>
-							</figcaption>
+			  <figcaption class="blockquote-footer mt-1 text-white-50">
+				<cite title="Source Title">{{course.instructor | capfirst}}</cite>
+			  </figcaption>
 
-							<figcaption class="blockquote-footer mt-1">
-								<cite title="Source Title"> 58 Lectures</cite>
-							</figcaption>
-						</div>
-					</div>
-				</a>
+			  <figcaption class="blockquote-footer mt-1">
+				<cite title="Source Title"> {{course.lecture_count}} lessons</cite>
+			  </figcaption>
 			</div>
-
-			<div class="col-6 col-md-3">
-				<a href="" class="text-decoration-none text-white">
-					<div class="card">
-						<img src="./img/bg.jpg" class="card-img-top" alt="..." />
-						<div class="card-body">
-							<blockquote class="blockquote bold">
-								<h6 class="h6">Python for absoulte begginers</h6>
-							</blockquote>
-
-							<figcaption class="blockquote-footer mt-1 text-white-50">
-								<cite title="Source Title">Ankit Andrel</cite>
-							</figcaption>
-
-							<figcaption class="blockquote-footer mt-1">
-								<cite title="Source Title"> 58 Lectures</cite>
-							</figcaption>
-						</div>
-					</div>
-				</a>
-			</div>
-
-			<div class="col-6 col-md-3">
-				<a href="" class="text-decoration-none text-white">
-					<div class="card">
-						<img src="./img/bg.jpg" class="card-img-top" alt="..." />
-						<div class="card-body">
-							<blockquote class="blockquote bold">
-								<h6 class="h6">Python for absoulte begginers</h6>
-							</blockquote>
-
-							<figcaption class="blockquote-footer mt-1 text-white-50">
-								<cite title="Source Title">Ankit Andrel</cite>
-							</figcaption>
-
-							<figcaption class="blockquote-footer mt-1">
-								<cite title="Source Title"> 58 Lectures</cite>
-							</figcaption>
-						</div>
-					</div>
-				</a>
-			</div>
-
-			<div class="col-6 col-md-3">
-				<a href="" class="text-decoration-none text-white">
-					<div class="card">
-						<img src="./img/bg.jpg" class="card-img-top" alt="..." />
-						<div class="card-body">
-							<blockquote class="blockquote bold">
-								<h6 class="h6">Python for absoulte begginers</h6>
-							</blockquote>
-
-							<figcaption class="blockquote-footer mt-1 text-white-50">
-								<cite title="Source Title">Ankit Andrel</cite>
-							</figcaption>
-
-							<figcaption class="blockquote-footer mt-1">
-								<cite title="Source Title"> 58 Lectures</cite>
-							</figcaption>
-						</div>
-					</div>
-				</a>
-			</div>
-		</div>
+		  </div>
+		</a>
+	  </div>
+	  {% endfor %}
 	</div>
+  </div>
 </section>
 
 <!-- Recently Added -->
 
 <section id="featured-courses" class="my-5 text-white">
 	<div class="row container mb-4 mx-auto">
-		<div
-			class="featured-courses-heading d-flex justify-content-between mx-auto"
-		>
-			<h3>Recently Added courses</h3>
-			<a href=""><h6>View All</h6></a>
-		</div>
-	</div>
+		  <h3>Recently Added courses</h3>
+	  </div>
 	<div class="container">
-		<div class="row featured-course-card mx-auto">
-			<div class="col-6 col-md-3">
-				<a href="" class="text-decoration-none text-white">
-					<div class="card">
-						<img src="./img/bg.jpg" class="card-img-top" alt="..." />
-						<div class="card-body">
-							<blockquote class="blockquote bold">
-								<h6 class="h6">Python for absoulte begginers</h6>
-							</blockquote>
+	  <div class="row featured-course-card mx-auto">
+		{% for course in recently_added %}
+		<div class="col-6 col-md-3 d-flex align-items-stretch">
+		  <a href="{% url 'course_details' course.id %}" class="text-decoration-none text-white">
+			<div class="card">
+			  <img src="{{course.thumbnail.url}}" class="card-img-top" alt="..." />
+			  <div class="card-body">
+				<blockquote class="blockquote bold">
+				  <h6 class="h6">{{course.title}}</h6>
+				</blockquote>
 
-							<figcaption class="blockquote-footer mt-1 text-white-50">
-								<cite title="Source Title">Ankit Andrel</cite>
-							</figcaption>
+				<figcaption class="blockquote-footer mt-1 text-white-50">
+				  <cite title="Source Title">{{course.instructor | capfirst}}</cite>
+				</figcaption>
 
-							<figcaption class="blockquote-footer mt-1">
-								<cite title="Source Title"> 58 Lectures</cite>
-							</figcaption>
-						</div>
-					</div>
-				</a>
+				<figcaption class="blockquote-footer mt-1">
+				  <cite title="Source Title"> {{course.lecture_count}} lessons</cite>
+				</figcaption>
+			  </div>
 			</div>
-
-			<div class="col-6 col-md-3">
-				<a href="" class="text-decoration-none text-white">
-					<div class="card">
-						<img src="./img/bg.jpg" class="card-img-top" alt="..." />
-						<div class="card-body">
-							<blockquote class="blockquote bold">
-								<h6 class="h6">Python for absoulte begginers</h6>
-							</blockquote>
-
-							<figcaption class="blockquote-footer mt-1 text-white-50">
-								<cite title="Source Title">Ankit Andrel</cite>
-							</figcaption>
-
-							<figcaption class="blockquote-footer mt-1">
-								<cite title="Source Title"> 58 Lectures</cite>
-							</figcaption>
-						</div>
-					</div>
-				</a>
-			</div>
-
-			<div class="col-6 col-md-3">
-				<a href="" class="text-decoration-none text-white">
-					<div class="card">
-						<img src="./img/bg.jpg" class="card-img-top" alt="..." />
-						<div class="card-body">
-							<blockquote class="blockquote bold">
-								<h6 class="h6">Python for absoulte begginers</h6>
-							</blockquote>
-
-							<figcaption class="blockquote-footer mt-1 text-white-50">
-								<cite title="Source Title">Ankit Andrel</cite>
-							</figcaption>
-
-							<figcaption class="blockquote-footer mt-1">
-								<cite title="Source Title"> 58 Lectures</cite>
-							</figcaption>
-						</div>
-					</div>
-				</a>
-			</div>
-
-			<div class="col-6 col-md-3">
-				<a href="" class="text-decoration-none text-white">
-					<div class="card">
-						<img src="./img/bg.jpg" class="card-img-top" alt="..." />
-						<div class="card-body">
-							<blockquote class="blockquote bold">
-								<h6 class="h6">Python for absoulte begginers</h6>
-							</blockquote>
-
-							<figcaption class="blockquote-footer mt-1 text-white-50">
-								<cite title="Source Title">Ankit Andrel</cite>
-							</figcaption>
-
-							<figcaption class="blockquote-footer mt-1">
-								<cite title="Source Title"> 58 Lectures</cite>
-							</figcaption>
-						</div>
-					</div>
-				</a>
-			</div>
+		  </a>
 		</div>
+		{% endfor %}
+	  </div>
 	</div>
-</section>
+  </section>
 
 {% endblock content %}

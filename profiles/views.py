@@ -1,9 +1,10 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from .models import *
-from .forms import ProfileUpdateForm
+from .forms import ProfileUpdateForm, BecomeInstructorForm
 from django.contrib import messages
 from courses.models import Course, Enrollment
+from django.urls import reverse
 
 # Create your views here.
 
@@ -28,10 +29,8 @@ def profile(request):
 
 @login_required(login_url="account_login")
 def edit_profile(request):
-
     current_user = request.user
     if request.method == "POST":
-
         profile_form = ProfileUpdateForm(
             request.POST,
             request.FILES,
@@ -54,13 +53,37 @@ def edit_profile(request):
 
 def instructor_profile(request, username):
     instructor_profile = User.objects.get(username=username)
-    instructor_courses = Course.objects.all().filter(
-        course_instructor=instructor_profile
-    )
+    instructor_courses = Course.objects.all().filter(instructor=instructor_profile)
 
     context = {
         "instructor_profile": instructor_profile,
         "instructor_courses": instructor_courses,
     }
 
-    return render(request, "profiles/instructor_info.html", context)
+    return render(request, "profiles/instructor_profile.html", context)
+
+
+def become_instructor_form(request):
+    form = BecomeInstructorForm()
+    user_profile = Profile.objects.get(user=request.user)
+    if request.method == "POST":
+        form = BecomeInstructorForm(request.POST)
+        if form.is_valid():
+
+            user = form.save(commit=False)
+            user.user = request.user.profile
+            user_profile.is_instructor = True
+            user_profile.save()
+            user.save()
+            messages.success(request, "You are now Instructor")
+            return redirect(
+                reverse(
+                    "profile",
+                )
+            )
+
+    context = {
+        "form": form,
+    }
+
+    return render(request, "profiles/become_instructor.html", context)

@@ -16,10 +16,22 @@
 		<div class="collapse navbar-collapse" id="navbarColor02">
 			<ul class="navbar-nav me-auto">
 				<li class="nav-item">
+					<a class="nav-link" href="{% url 'about' %}">About</a>
+				</li>
+				<li class="nav-item">
 					<a class="nav-link" href="{% url 'explore' %}">Explore Courses </a>
 				</li>
-			
-
+				{% if user.is_authenticated %}
+				{% if request.user.profile.is_instructor%}
+				<li class="nav-item">
+					<a class="nav-link" href="{% url 'add-course' %}">Add New Course</a>
+				</li>
+				{% else%}
+				<li class="nav-item">
+					<a class="nav-link" href="{% url 'become_instructor' %}">Become Instructor</a>
+				</li>
+				{%endif%}
+				{%endif%}
 				<li class="nav-item dropdown">
 					<a
 						class="nav-link dropdown-toggle"
@@ -31,25 +43,47 @@
 						>Category</a
 					>
 					<div class="dropdown-menu">
-						<a class="dropdown-item" href="#">Action</a>
-						<a class="dropdown-item" href="#">Another action</a>
-						<a class="dropdown-item" href="#">Something else here</a>
-						<div class="dropdown-divider"></div>
-						<a class="dropdown-item" href="#">Separated link</a>
+						{% for category in  links %}
+						<a class="dropdown-item" href="{{ category.get_url }}">{{category.category}}</a>
+						{% endfor %}
 					</div>
 				</li>
+				{% if user.is_authenticated %}
+				<li class="nav-item dropdown">
+				  <a
+					class="nav-link dropdown-toggle"
+					data-bs-toggle="dropdown"
+					href="#"
+					role="button"
+					aria-haspopup="true"
+					aria-expanded="false"
+					>Account</a
+				  >
+		
+				  <div class="dropdown-menu">
+					<a
+					  class="dropdown-item"
+					  href = "{% url 'account_logout' %}"
+					  >Logout</a
+					>
+					<a class="dropdown-item" href="{% url 'update_profile' %}">Update Profile</a>
+					
+				  </div>
+				</li>
+				{% endif %}
 			</ul>
-			<form class="d-flex w-sm-50">
+			<form class="d-flex w-sm-50" method='GET' action="{% url 'search' %}" >
 				<input
-					class="form-control me-sm-2"
-					type="text"
-					placeholder="Search"
-					style="width: 100%"
+				  class="form-control me-2"
+				  type="text"
+				  placeholder="Search"
+				  name="keyword"
+				  style="width: 100%"
 				/>
-				<button class="btn btn-primary my-2 my-sm-0 mx-2" type="submit">
-					<i class="bi bi-search"></i>
+				<button class="btn btn-warning my-2 my-sm-0 mx-2" type="submit">
+				  <i class="bi bi-search"></i>
 				</button>
-			</form>
+			  </form>
 			<div class="login">
 				{% if user.is_authenticated%}
 				<a
@@ -62,7 +96,7 @@
 				{% else %}
 				<a
 					href="{% url 'account_login' %}"
-					class="btn btn-dark my-2 my-sm-0"
+					class="btn btn-primary my-2 my-sm-0"
 					type="submit"
 				>
 					Login

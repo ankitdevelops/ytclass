@@ -16,7 +16,7 @@
 						<h5>Course Level: {{course.level}}</h5>
 						<h5>Students Enrolled: {{course.no_of_enrolled}}</h5>
 						<h5>course Language: {{course.language}}</h5>
-						<h5>No of Lectures: {{course.no_of_lecture}}</h5>
+						<h5>No of Lectures: {{course.lecture_count}}</h5>
 					</div>
 
 					<a
@@ -131,7 +131,7 @@
 			},
 		}).then((value) => {
 			if (value) {
-				location.href = "/delete_lecture/" + id + "/";
+				location.href = "/courses/delete_lecture/" + id + "/";
 			}
 		});
 	};
@@ -157,7 +157,7 @@
 			},
 		}).then((value) => {
 			if (value) {
-				location.href = "/delete_course/" + id + "/";
+				location.href = "/courses/delete_course/" + id + "/";
 			}
 		});
 	};
