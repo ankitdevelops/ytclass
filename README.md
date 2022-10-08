@@ -9,7 +9,6 @@ YouTube is a great platform for learning anything, you can find videos on almost
 
 - Django
 - Bootstrap
-- Linode
 - SQLite
 
 # Walkthrough
@@ -22,7 +21,6 @@ YouTube is a great platform for learning anything, you can find videos on almost
 -  Although there were lots of challenges I faced in this project if you ask me one challenge which took most of the time to figure out is the "Auto Importing of Video from the YouTube playlist". But in the end, I was able to solve it by using the `pytube` package and Django's` bulk_create` method.
 
 # Live Site
-[Visit YTClass](https://www.ytclass.live/)
 
 [Repo](https://github.com/ankitdevelops/ytclass)
 
